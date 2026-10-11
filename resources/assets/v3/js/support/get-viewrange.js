@@ -39,8 +39,25 @@ import {
     subWeeks,
     subYears,
 } from "date-fns";
+import { addJalaliViewPeriod, getJalaliViewRange } from "../util/jalali.js";
 
-function getViewRange(viewRange, today) {
+function usesJalaliCalendar(calendar) {
+    if (calendar === "jalali") {
+        return true;
+    }
+    if (calendar === "gregorian") {
+        return false;
+    }
+    return typeof window !== "undefined" && window.store?.get("viewCalendar") === "jalali";
+}
+
+function getViewRange(viewRange, today, calendar) {
+    if (usesJalaliCalendar(calendar)) {
+        const jalali = getJalaliViewRange(viewRange, today);
+        if (jalali) {
+            return jalali;
+        }
+    }
     let start;
     let end;
 
@@ -143,7 +160,13 @@ function getViewRange(viewRange, today) {
     return { start: start, end: end };
 }
 
-function addPeriod(date, viewRange) {
+function addPeriod(date, viewRange, calendar) {
+    if (usesJalaliCalendar(calendar)) {
+        const jalali = addJalaliViewPeriod(date, viewRange, 1);
+        if (jalali) {
+            return jalali;
+        }
+    }
     let nextPeriodStart;
     let nextPeriodEnd;
     switch (viewRange) {
@@ -248,7 +271,13 @@ function addPeriod(date, viewRange) {
     };
 }
 
-function subtractPeriod(date, viewRange) {
+function subtractPeriod(date, viewRange, calendar) {
+    if (usesJalaliCalendar(calendar)) {
+        const jalali = addJalaliViewPeriod(date, viewRange, -1);
+        if (jalali) {
+            return jalali;
+        }
+    }
     let prevPeriodStart;
     let prevPeriodEnd;
     switch (viewRange) {

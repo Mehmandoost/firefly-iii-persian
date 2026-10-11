@@ -53,6 +53,7 @@ return [
     'today'                                               => 'today',
     'organization'                                        => 'Organization',
     'customRange'                                         => 'Custom range',
+    'view_calendar'                                       => 'Calendar',
     'date_range'                                          => 'Date range',
     'apply'                                               => 'Apply',
     'select_date'                                         => 'Select date..',

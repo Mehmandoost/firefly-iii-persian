@@ -61,8 +61,10 @@ const preferences = await getVariables([
     "language",
     "convert_to_primary",
     "dateInputCalendar",
+    "viewCalendar",
 ]);
 
+store.set("viewCalendar", preferences.viewCalendar === "jalali" ? "jalali" : "gregorian");
 const range = getViewRange(preferences.viewRange, new Date());
 if (!store.get("start") || !store.get("end")) {
     // calculate new start and end, and store them.

@@ -45,4 +45,22 @@ final class JalaliCalendarTest extends TestCase
         self::assertStringContainsString('۱۴۰۵', $formatted);
         self::assertStringContainsString('۱۴:۳۰:۰۰', $formatted);
     }
+
+    #[Test]
+    public function monthBoundsFollowJalaliMonth(): void
+    {
+        $today  = Carbon::create(2026, 10, 11, 12, 0, 0, 'UTC');
+        $bounds = JalaliCalendar::viewBounds('1M', $today);
+
+        self::assertNotNull($bounds);
+        self::assertSame('2026-09-23', $bounds[0]->format('Y-m-d'));
+        self::assertSame('2026-10-22', $bounds[1]->format('Y-m-d'));
+    }
+
+    #[Test]
+    public function esfandLengthFollowsLeapYear(): void
+    {
+        self::assertSame(30, JalaliCalendar::monthLength(1403, 12));
+        self::assertSame(29, JalaliCalendar::monthLength(1404, 12));
+    }
 }

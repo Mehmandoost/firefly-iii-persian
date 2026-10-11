@@ -51,6 +51,18 @@
                 {{ __('firefly.customRange') }}
             </a>
         </li>
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">{{ __('firefly.view_calendar') }}</li>
+        <li class="px-3 pb-2">
+            <div class="btn-group btn-group-sm w-100" role="group" aria-label="{{ __('firefly.view_calendar') }}">
+                <button type="button" class="btn"
+                        :class="viewCalendar === 'jalali' ? 'btn-primary' : 'btn-outline-secondary'"
+                        @click.prevent="setViewCalendar('jalali')">شمسی</button>
+                <button type="button" class="btn"
+                        :class="viewCalendar === 'gregorian' ? 'btn-primary' : 'btn-outline-secondary'"
+                        @click.prevent="setViewCalendar('gregorian')">میلادی</button>
+            </div>
+        </li>
     </ul>
 </li>
 

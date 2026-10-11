@@ -20,9 +20,9 @@
 
 import { endOfDay, startOfMonth, startOfYear, subDays } from "date-fns";
 import formatDate from "../../util/format-date.js";
-import { formatRangeLabel } from "../../util/jalali.js";
+import { formatJalaliDate, formatRangeLabel, getJalaliViewRange } from "../../util/jalali.js";
 import i18next from "i18next";
-import { addPeriod, subtractPeriod } from "../../support/get-viewrange.js";
+import { addPeriod, getViewRange, subtractPeriod } from "../../support/get-viewrange.js";
 
 export default () => ({
     range: {
@@ -60,10 +60,12 @@ export default () => ({
     // Mon Aug 31 2026 19:00:00 GMT-0500
     // 2026-08-31T19:00:00-05:00
     preferredFormat: "eee LLL dd yyyy HH:mm:ss 'GMT'xxx",
+    viewCalendar: "gregorian",
 
     init() {
         this.i18next = i18next;
         this.viewRange = window.store.get("viewRange");
+        this.viewCalendar = window.store.get("viewCalendar") === "jalali" ? "jalali" : "gregorian";
         if (false === window.enableDates) {
             // console.log("Date selection is disabled on this page.");
             document.getElementById("date-dropdown").style.display = "none";
@@ -119,41 +121,25 @@ export default () => ({
         let locale = window.store.get("locale");
         let formatString = i18next.t("config.month_and_day_fns", { lng: locale });
         let element = document.getElementsByClassName("daterange-holder")[0];
-        element.textContent = formatRangeLabel(
-            formatDate(this.range.start, formatString) + " - " + formatDate(this.range.end, formatString),
-            this.range.start,
-            this.range.end,
-        );
+        element.textContent = this.rangeLabel(this.range.start, this.range.end, formatString);
         element.setAttribute("data-start", formatDate(this.range.start, this.preferredFormat, "en-US"));
         element.setAttribute("data-end", formatDate(this.range.end, this.preferredFormat, "en-US"));
 
         // set the current one
         element = document.getElementsByClassName("daterange-current")[0];
-        element.textContent = formatRangeLabel(
-            formatDate(this.defaultRange.start, formatString) + " - " + formatDate(this.defaultRange.end, formatString),
-            this.defaultRange.start,
-            this.defaultRange.end,
-        );
+        element.textContent = this.rangeLabel(this.defaultRange.start, this.defaultRange.end, formatString);
         element.setAttribute("data-start", formatDate(this.defaultRange.start, this.preferredFormat, "en-US"));
         element.setAttribute("data-end", formatDate(this.defaultRange.end, this.preferredFormat, "en-US"));
 
         // generate next range
         element = document.getElementsByClassName("daterange-next")[0];
-        element.textContent = formatRangeLabel(
-            formatDate(nextRange.start, formatString) + " - " + formatDate(nextRange.end, formatString),
-            nextRange.start,
-            nextRange.end,
-        );
+        element.textContent = this.rangeLabel(nextRange.start, nextRange.end, formatString);
         element.setAttribute("data-start", formatDate(nextRange.start, this.preferredFormat, "en-US"));
         element.setAttribute("data-end", formatDate(nextRange.end, this.preferredFormat, "en-US"));
 
         // previous range.
         element = document.getElementsByClassName("daterange-prev")[0];
-        element.textContent = formatRangeLabel(
-            formatDate(prevRange.start, formatString) + " - " + formatDate(prevRange.end, formatString),
-            prevRange.start,
-            prevRange.end,
-        );
+        element.textContent = this.rangeLabel(prevRange.start, prevRange.end, formatString);
         element.setAttribute("data-start", formatDate(prevRange.start, this.preferredFormat, "en-US"));
         element.setAttribute("data-end", formatDate(prevRange.end, this.preferredFormat, "en-US"));
 
@@ -186,6 +172,40 @@ export default () => ({
         element.setAttribute("data-end", formatDate(ytd.end, this.preferredFormat, "en-US"));
     },
 
+    rangeLabel(start, end, formatString) {
+        if (this.viewCalendar === "jalali") {
+            return formatJalaliDate(start) + " - " + formatJalaliDate(end);
+        }
+
+        return formatRangeLabel(
+            formatDate(start, formatString) + " - " + formatDate(end, formatString),
+            start,
+            end,
+        );
+    },
+
+    async setViewCalendar(mode) {
+        if (mode !== "jalali" && mode !== "gregorian") {
+            return;
+        }
+        if (mode === this.viewCalendar) {
+            return;
+        }
+        try {
+            await window.axios.put("api/v1/preferences/viewCalendar", { data: mode });
+        } catch (error) {
+            await window.axios.post("api/v1/preferences", { name: "viewCalendar", data: mode });
+        }
+        window.store.set("viewCalendar", mode);
+        this.viewCalendar = mode;
+        const range = getViewRange(this.viewRange, new Date(), mode);
+        window.store.set("start", range.start);
+        window.store.set("end", range.end);
+        window.store.set("defaultStart", range.start);
+        window.store.set("defaultEnd", range.end);
+        this.submitForm();
+    },
+
     getNextRange() {
         return addPeriod(this.range.start, this.viewRange);
     },
@@ -201,12 +221,18 @@ export default () => ({
     },
 
     ytd() {
+        if (this.viewCalendar === "jalali") {
+            return getJalaliViewRange("YTD", new Date());
+        }
         let end = endOfDay(new Date());
         let start = startOfYear(end);
         return { start: start, end: end };
     },
 
     mtd() {
+        if (this.viewCalendar === "jalali") {
+            return getJalaliViewRange("MTD", new Date());
+        }
         let end = endOfDay(new Date());
         let start = startOfMonth(end);
         return { start: start, end: end };

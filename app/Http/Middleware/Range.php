@@ -26,6 +26,7 @@ namespace FireflyIII\Http\Middleware;
 use Carbon\Carbon;
 use Closure;
 use FireflyIII\Repositories\Journal\JournalRepositoryInterface;
+use FireflyIII\Support\Calendar\JalaliCalendar;
 use FireflyIII\Support\Facades\Amount;
 use FireflyIII\Support\Facades\AppConfiguration;
 use FireflyIII\Support\Facades\Navigation;
@@ -129,8 +130,14 @@ class Range
             }
 
             $today     = today(config('app.timezone'));
-            $start     = Navigation::updateStartDate((string) $viewRange, $today);
-            $end       = Navigation::updateEndDate((string) $viewRange, $start);
+            $calendar  = Preferences::get('viewCalendar', 'gregorian')->data;
+            $bounds    = 'jalali' === $calendar ? JalaliCalendar::viewBounds((string) $viewRange, $today) : null;
+            if (null !== $bounds) {
+                [$start, $end] = $bounds;
+            } else {
+                $start = Navigation::updateStartDate((string) $viewRange, $today);
+                $end   = Navigation::updateEndDate((string) $viewRange, $start);
+            }
 
             app('session')->put('start', $start);
             app('session')->put('end', $end);

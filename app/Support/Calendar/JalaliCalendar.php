@@ -139,6 +139,129 @@ final class JalaliCalendar
         ]);
     }
 
+    public static function monthLength(int $jy, int $jm): int
+    {
+        if ($jm <= 6) {
+            return 31;
+        }
+        if ($jm <= 11) {
+            return 30;
+        }
+
+        return self::isLeapYear($jy) ? 30 : 29;
+    }
+
+    public static function isLeapYear(int $jy): bool
+    {
+        return in_array($jy % 33, [1, 5, 9, 13, 17, 22, 26, 30], true);
+    }
+
+    /**
+     * Start and end of a view range on the Jalali calendar.
+     * Null for ranges that are a count of days in either calendar.
+     *
+     * @return null|array{0: Carbon, 1: Carbon}
+     */
+    public static function viewBounds(string $range, Carbon $today): ?array
+    {
+        $parts = self::toJalaali((int) $today->format('Y'), (int) $today->format('n'), (int) $today->format('j'));
+        $jy    = $parts['jy'];
+        $jm    = $parts['jm'];
+        $tz    = $today->getTimezone();
+
+        switch ($range) {
+            case '1W':
+                return [
+                    $today->copy()->startOfWeek(Carbon::SATURDAY)->startOfDay(),
+                    $today->copy()->endOfWeek(Carbon::SATURDAY)->endOfDay(),
+                ];
+
+            case '1M':
+                return self::monthBounds($jy, $jm, $tz);
+
+            case 'MTD':
+                return [self::monthBounds($jy, $jm, $tz)[0], $today->copy()->endOfDay()];
+
+            case '3M':
+                return self::quarterBounds($jy, $jm, $tz);
+
+            case 'QTD':
+                return [self::quarterBounds($jy, $jm, $tz)[0], $today->copy()->endOfDay()];
+
+            case '6M':
+                return self::halfBounds($jy, $jm, $tz);
+
+            case '1Y':
+                return self::yearBounds($jy, $tz);
+
+            case 'YTD':
+                return [self::yearBounds($jy, $tz)[0], $today->copy()->endOfDay()];
+
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * @return array{0: Carbon, 1: Carbon}
+     */
+    private static function monthBounds(int $jy, int $jm, \DateTimeZone $timezone): array
+    {
+        return [
+            self::carbonFromJalali($jy, $jm, 1, $timezone)->startOfDay(),
+            self::carbonFromJalali($jy, $jm, self::monthLength($jy, $jm), $timezone)->endOfDay(),
+        ];
+    }
+
+    /**
+     * @return array{0: Carbon, 1: Carbon}
+     */
+    private static function quarterBounds(int $jy, int $jm, \DateTimeZone $timezone): array
+    {
+        $startMonth = (int) (floor(($jm - 1) / 3) * 3) + 1;
+
+        return [
+            self::monthBounds($jy, $startMonth, $timezone)[0],
+            self::monthBounds($jy, $startMonth + 2, $timezone)[1],
+        ];
+    }
+
+    /**
+     * @return array{0: Carbon, 1: Carbon}
+     */
+    private static function halfBounds(int $jy, int $jm, \DateTimeZone $timezone): array
+    {
+        if ($jm <= 6) {
+            return [
+                self::monthBounds($jy, 1, $timezone)[0],
+                self::monthBounds($jy, 6, $timezone)[1],
+            ];
+        }
+
+        return [
+            self::monthBounds($jy, 7, $timezone)[0],
+            self::monthBounds($jy, 12, $timezone)[1],
+        ];
+    }
+
+    /**
+     * @return array{0: Carbon, 1: Carbon}
+     */
+    private static function yearBounds(int $jy, \DateTimeZone $timezone): array
+    {
+        return [
+            self::monthBounds($jy, 1, $timezone)[0],
+            self::monthBounds($jy, 12, $timezone)[1],
+        ];
+    }
+
+    private static function carbonFromJalali(int $jy, int $jm, int $jd, \DateTimeZone $timezone): Carbon
+    {
+        $parts = self::toGregorian($jy, $jm, $jd);
+
+        return Carbon::create($parts['gy'], $parts['gm'], $parts['gd'], 0, 0, 0, $timezone);
+    }
+
     public static function fromPersianDigits(string $value): string
     {
         return strtr($value, [

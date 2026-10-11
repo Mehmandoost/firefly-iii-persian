@@ -29,9 +29,18 @@ export default function (amount, currencyCode) {
         console.warn("format-money: currencyCode is not a valid ISO 4217 code:", currencyCode);
         return "";
     }
-    let locale = window.__localeId__.replace("_", "-");
-    return Intl.NumberFormat(locale, {
-        style: "currency",
-        currency: currencyCode,
-    }).format(amount);
+    const locale = String(window.__localeId__ ?? "en-US").replace("_", "-");
+    try {
+        return Intl.NumberFormat(locale, {
+            style: "currency",
+            currency: currencyCode,
+        }).format(amount);
+    } catch (error) {
+        const formatted = Intl.NumberFormat(locale, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }).format(amount);
+
+        return `${formatted} ${currencyCode}`;
+    }
 }
