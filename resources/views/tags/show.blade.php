@@ -35,7 +35,7 @@
                                     {{ trans('list.date') }}
                                 </td>
                                 <td>
-                                    {{ $tag->date->isoFormat($monthAndDayFormat) }}
+                                    {{ ff_date($tag->date, $monthAndDayFormat) }}
                                 </td>
                             </tr>
                         @endif

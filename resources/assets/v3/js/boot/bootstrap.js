@@ -32,6 +32,8 @@ import { getFreshVariable } from "../store/get-fresh-variable.js";
 import { getVariables } from "../store/get-variables.js";
 import { getViewRange } from "../support/get-viewrange.js";
 import { loadTranslations } from "../support/load-translations.js";
+import { mountJalaliPickerHosts } from "../components/jalali-picker.js";
+import { mountJalaliSingleDateTargets } from "../pages/transactions/shared/date-input-calendar.js";
 import i18next from "i18next";
 
 window.bootstrapped = false;
@@ -58,6 +60,7 @@ const preferences = await getVariables([
     "locale",
     "language",
     "convert_to_primary",
+    "dateInputCalendar",
 ]);
 
 const range = getViewRange(preferences.viewRange, new Date());
@@ -82,6 +85,8 @@ const replacedLanguage = preferences.language.replace("_", "-");
 window.__localeId__ = replacedLocale;
 store.set("language", replacedLanguage);
 store.set("locale", replacedLocale);
+store.set("dateInputCalendar", preferences.dateInputCalendar ?? "gregorian");
+window.dateInputCalendar = preferences.dateInputCalendar ?? "gregorian";
 console.log("Ready with bootstrap for this page.");
 
 // need the language to be loaded first, so continue only once we have it.
@@ -89,6 +94,14 @@ await loadTranslations(replacedLanguage, replacedLocale);
 const event = new Event("firefly-iii-bootstrapped");
 document.dispatchEvent(event);
 window.bootstrapped = true;
+mountJalaliSingleDateTargets();
+document.addEventListener("shown.bs.modal", () => {
+    mountJalaliSingleDateTargets();
+});
+const jalaliPickerObserver = new MutationObserver(() => {
+    mountJalaliPickerHosts();
+});
+jalaliPickerObserver.observe(document.body, { childList: true, subtree: true });
 
 // page may have an introduction necessary to be played.
 if (window.showTour) {

@@ -93,7 +93,7 @@
             {!! format_amount_by_symbol($journal['balance_after'], $auditData[$account->id]['currency']->symbol, $auditData[$account->id]['currency']->decimal_places) !!}
         </td>
 
-        <td class="hide-date">{{ $journal['date']->isoFormat($monthAndDayFormat) }}</td>
+        <td class="hide-date">{{ ff_date($journal['date'], $monthAndDayFormat) }}</td>
 
         <td class="hide-from">
             <a href="{{ route('accounts.show', [$journal['source_account_id']]) }}" title="{{ $journal['source_account_iban'] ?? $journal['source_account_name'] }}">{{ $journal['source_account_name'] }}</a>
@@ -120,11 +120,11 @@
 
         <!-- new optional fields (2x) -->
         <td class="hide-create_date">
-            {{ $journal['created_at']->isoFormat($dateTimeFormat) }}
+            {{ ff_date($journal['created_at'], $dateTimeFormat) }}
         </td>
 
         <td class="hide-update_date">
-            {{ $journal['updated_at']->isoFormat($dateTimeFormat) }}
+            {{ ff_date($journal['updated_at'], $dateTimeFormat) }}
         </td>
         <td class="hide-notes">
             {!! parse_markdown($journal['notes'] ?? '') !!}
@@ -133,32 +133,32 @@
         <!-- more new dates -->
         <td class="hide-interest_date">
             @if(null !== $journal['interest_date'])
-            {{ $journal['interest_date']->isoFormat($monthAndDayFormat) }}
+            {{ ff_date($journal['interest_date'], $monthAndDayFormat) }}
             @endif
         </td>
         <td class="hide-book_date">
             @if(null !== $journal['book_date'])
-            {{ $journal['book_date']->isoFormat($monthAndDayFormat) }}
+            {{ ff_date($journal['book_date'], $monthAndDayFormat) }}
             @endif
         </td>
         <td class="hide-process_date">
             @if(null !== $journal['process_date'])
-            {{ $journal['process_date']->isoFormat($monthAndDayFormat) }}
+            {{ ff_date($journal['process_date'], $monthAndDayFormat) }}
             @endif
         </td>
         <td class="hide-due_date">
             @if(null !== $journal['due_date'])
-            {{ $journal['due_date']->isoFormat($monthAndDayFormat) }}
+            {{ ff_date($journal['due_date'], $monthAndDayFormat) }}
             @endif
         </td>
         <td class="hide-payment_date">
             @if(null !== $journal['payment_date'])
-            {{ $journal['payment_date']->isoFormat($monthAndDayFormat) }}
+            {{ ff_date($journal['payment_date'], $monthAndDayFormat) }}
             @endif
         </td>
         <td class="hide-invoice_date">
             @if(null !== $journal['invoice_date'])
-            {{ $journal['invoice_date']->isoFormat($monthAndDayFormat) }}
+            {{ ff_date($journal['invoice_date'], $monthAndDayFormat) }}
             @endif
         </td>
     </tr>

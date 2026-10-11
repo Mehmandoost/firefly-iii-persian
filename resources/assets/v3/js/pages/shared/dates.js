@@ -20,6 +20,7 @@
 
 import { endOfDay, startOfMonth, startOfYear, subDays } from "date-fns";
 import formatDate from "../../util/format-date.js";
+import { formatRangeLabel } from "../../util/jalali.js";
 import i18next from "i18next";
 import { addPeriod, subtractPeriod } from "../../support/get-viewrange.js";
 
@@ -68,10 +69,13 @@ export default () => ({
             document.getElementById("date-dropdown").style.display = "none";
             return;
         }
-        document.getElementById("customDateRangeCalendar").addEventListener("change", (e) => {
-            console.log("Responding to change event in customDateRangeCalendar");
-            this.updateDatesNoSubmit(e);
-        });
+        const rangeCalendar = document.getElementById("customDateRangeCalendar");
+        if (rangeCalendar) {
+            rangeCalendar.addEventListener("change", (e) => {
+                console.log("Responding to change event in customDateRangeCalendar");
+                this.updateDatesNoSubmit(e);
+            });
+        }
         // console.log('From store: start=', window.store.get("start"));
         // console.log('From store: end=', window.store.get("end"));
         let end = new Date(window.store.get("end"));
@@ -115,29 +119,41 @@ export default () => ({
         let locale = window.store.get("locale");
         let formatString = i18next.t("config.month_and_day_fns", { lng: locale });
         let element = document.getElementsByClassName("daterange-holder")[0];
-        element.textContent =
-            formatDate(this.range.start, formatString) + " - " + formatDate(this.range.end, formatString);
+        element.textContent = formatRangeLabel(
+            formatDate(this.range.start, formatString) + " - " + formatDate(this.range.end, formatString),
+            this.range.start,
+            this.range.end,
+        );
         element.setAttribute("data-start", formatDate(this.range.start, this.preferredFormat, "en-US"));
         element.setAttribute("data-end", formatDate(this.range.end, this.preferredFormat, "en-US"));
 
         // set the current one
         element = document.getElementsByClassName("daterange-current")[0];
-        element.textContent =
-            formatDate(this.defaultRange.start, formatString) + " - " + formatDate(this.defaultRange.end, formatString);
+        element.textContent = formatRangeLabel(
+            formatDate(this.defaultRange.start, formatString) + " - " + formatDate(this.defaultRange.end, formatString),
+            this.defaultRange.start,
+            this.defaultRange.end,
+        );
         element.setAttribute("data-start", formatDate(this.defaultRange.start, this.preferredFormat, "en-US"));
         element.setAttribute("data-end", formatDate(this.defaultRange.end, this.preferredFormat, "en-US"));
 
         // generate next range
         element = document.getElementsByClassName("daterange-next")[0];
-        element.textContent =
-            formatDate(nextRange.start, formatString) + " - " + formatDate(nextRange.end, formatString);
+        element.textContent = formatRangeLabel(
+            formatDate(nextRange.start, formatString) + " - " + formatDate(nextRange.end, formatString),
+            nextRange.start,
+            nextRange.end,
+        );
         element.setAttribute("data-start", formatDate(nextRange.start, this.preferredFormat, "en-US"));
         element.setAttribute("data-end", formatDate(nextRange.end, this.preferredFormat, "en-US"));
 
         // previous range.
         element = document.getElementsByClassName("daterange-prev")[0];
-        element.textContent =
-            formatDate(prevRange.start, formatString) + " - " + formatDate(prevRange.end, formatString);
+        element.textContent = formatRangeLabel(
+            formatDate(prevRange.start, formatString) + " - " + formatDate(prevRange.end, formatString),
+            prevRange.start,
+            prevRange.end,
+        );
         element.setAttribute("data-start", formatDate(prevRange.start, this.preferredFormat, "en-US"));
         element.setAttribute("data-end", formatDate(prevRange.end, this.preferredFormat, "en-US"));
 

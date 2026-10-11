@@ -19,7 +19,7 @@
                     #{{ $logEntry->changer_id }}
                     </a>
             </th>
-            <td class="thirty" title="{{ $logEntry->created_at->isoFormat($dateTimeFormat) }}">
+            <td class="thirty" title="{{ ff_date($logEntry->created_at, $dateTimeFormat) }}">
                 {{ __('firefly.ale_action_' . $logEntry->action) }}
             </td>
             <td>
@@ -79,9 +79,9 @@
                     <code>{{ $logEntry->after }}</code>
                 @endif
                 @if ('update_date' == $logEntry->action)
-                    <code><s>{{ carbonize($logEntry->before)->isoFormat($dateTimeFormat) }}</s></code>
+                    <code><s>{{ ff_date(carbonize($logEntry->before), $dateTimeFormat) }}</s></code>
                     &rarr;
-                    <code>{{ carbonize($logEntry->after)->isoFormat($dateTimeFormat) }}</code>
+                    <code>{{ ff_date(carbonize($logEntry->after), $dateTimeFormat) }}</code>
                     @endif
                     @if ('update_transaction_type' == $logEntry->action)
                         {{ trans('firefly.' . $logEntry->before) }} &rarr; {{ trans('firefly.' . $logEntry->after) }}

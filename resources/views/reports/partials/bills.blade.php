@@ -23,7 +23,7 @@
                 </td>
                 <td data-value="{{ $bill['expected_dates'][0]?->format('Y-m-d') }}">
                     @foreach($bill['expected_dates'] as $date)
-                        {{ $date->isoFormat($monthAndDayFormat) }}<br/>
+                        {{ ff_date($date, $monthAndDayFormat) }}<br/>
                     @endforeach
                 </td>
                 <td class="text-end">
@@ -35,7 +35,7 @@
                             @php
                                 $hitCount++;
                             @endphp
-                            <a title="{{ $journal['date']->isoFormat($monthAndDayFormat) }}"
+                            <a title="{{ ff_date($journal['date'], $monthAndDayFormat) }}"
                                href="{{ route('transactions.show', [$journal['transaction_group_id']]) }}">{{ $journal['description'] }}</a>,
                             {!! format_amount_by_symbol($journal['amount'], $journal['currency_symbol'], $journal['currency_decimal_places']) !!}
                             <br/>

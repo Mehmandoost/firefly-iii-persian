@@ -78,11 +78,13 @@ import { keyUpFromDestination } from "./shared/keyup-from-destination.js";
 import { keyUpFromDescription } from "./shared/keyup-from-description.js";
 import focusFirstInput from "../../shared/focus-first-input.js";
 import filterForeignCurrencies from "./shared/filter-foreign-currencies.js";
+import { dateInputCalendarState } from "./shared/date-input-calendar.js";
 
 window.enableDates = false;
 
 let create = function () {
     return {
+        ...dateInputCalendarState(),
         // needed for translations.
         i18next: null,
 
@@ -294,6 +296,7 @@ let create = function () {
 
         init() {
             this.i18next = i18next;
+            this.initDateInputCalendar();
             this.addSplit();
 
             // load currencies and save in form data.

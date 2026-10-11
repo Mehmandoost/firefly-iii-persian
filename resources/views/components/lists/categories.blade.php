@@ -25,7 +25,7 @@
         </td>
         @if(null !== $category->lastActivity)
         <td data-value="{{ $category->lastActivity->format('Y-m-d H-i-s') }}">
-            {{ $category->lastActivity->isoFormat($monthAndDayFormat) }}
+            {{ ff_date($category->lastActivity, $monthAndDayFormat) }}
         </td>
         @else
         <td data-value="0000-00-00 00-00-00">

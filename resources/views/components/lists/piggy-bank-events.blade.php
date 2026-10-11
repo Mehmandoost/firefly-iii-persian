@@ -15,9 +15,9 @@
         @endif
         <td>
             @if($event->transaction_journal_id)
-                <a href="{{ route('transactions.show',$event->transactionJournal->transaction_group_id) }}" title="{{ $event->transactionJournal->description }}">{{ $event->date->isoFormat($monthAndDayFormat) }}</a>
+                <a href="{{ route('transactions.show',$event->transactionJournal->transaction_group_id) }}" title="{{ $event->transactionJournal->description }}">{{ ff_date($event->date, $monthAndDayFormat) }}</a>
             @else
-                {{ $event->date->isoFormat($monthAndDayFormat) }}
+                {{ ff_date($event->date, $monthAndDayFormat) }}
             @endif
         </td>
 

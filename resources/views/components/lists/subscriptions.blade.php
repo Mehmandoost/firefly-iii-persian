@@ -42,18 +42,18 @@
                                                 <br>
                                                 @if(carbonize($entry['end_date'])->lte($today))
                                                     <span
-                                                        class="text-danger">{{ trans('firefly.bill_end_index_line', ['date' => carbonize($entry['end_date'])->isoFormat($monthAndDayFormat)])  }}</span>
+                                                        class="text-danger">{{ trans('firefly.bill_end_index_line', ['date' => ff_date(carbonize($entry['end_date']), $monthAndDayFormat)])  }}</span>
                                                 @else
-                                                    {{ trans('firefly.bill_end_index_line', ['date' => carbonize($entry['end_date'])->isoFormat($monthAndDayFormat)])  }}
+                                                    {{ trans('firefly.bill_end_index_line', ['date' => ff_date(carbonize($entry['end_date']), $monthAndDayFormat)])  }}
                                                 @endif
                                             @endif
                                             @if($entry['extension_date'])
                                                 <br>
                                                 @if(carbonize($entry['extension_date'])->lte($today))
                                                     <span
-                                                        class="text-danger">{{ trans('firefly.bill_extension_index_line', ['date' => carbonize($entry['extension_date'])->isoFormat($monthAndDayFormat)])  }}</span>
+                                                        class="text-danger">{{ trans('firefly.bill_extension_index_line', ['date' => ff_date(carbonize($entry['extension_date']), $monthAndDayFormat)])  }}</span>
                                                 @else
-                                                    {{ trans('firefly.bill_extension_index_line', ['date' => carbonize($entry['extension_date'])->isoFormat($monthAndDayFormat)])  }}
+                                                    {{ trans('firefly.bill_extension_index_line', ['date' => ff_date(carbonize($entry['extension_date']), $monthAndDayFormat)])  }}
                                                 @endif
                                             @endif
 
@@ -97,7 +97,7 @@
                                         </td>
                                         <td class="expected_in_period">
                                             @if($entry['next_expected_match'])
-                                                {{ carbonize($entry['next_expected_match'])->isoFormat($monthAndDayFormat) }}
+                                                {{ ff_date(carbonize($entry['next_expected_match']), $monthAndDayFormat) }}
                                             @endif
                                         </td>
                                     @endif
@@ -122,7 +122,7 @@
                                         @endif
                                         <td class="expected_in_period">
                                             @foreach($entry['pay_dates'] as $date)
-                                                {{ carbonize($date)->isoFormat($monthAndDayFormat) }}<br>
+                                                {{ ff_date(carbonize($date), $monthAndDayFormat) }}<br>
                                             @endforeach
 
                                         </td>
@@ -136,17 +136,17 @@
                                     @if(count($entry['paid_dates']) > 0 && $entry['active'])
                                         <td class="paid_in_period text-success">
                                             @foreach($entry['paid_dates'] as $currentPaid)
-                                                <a href="{{ route('transactions.show', $currentPaid['transaction_group_id']) }}">{{ carbonize($currentPaid['date'])->isoFormat($monthAndDayFormat) }}</a>
+                                                <a href="{{ route('transactions.show', $currentPaid['transaction_group_id']) }}">{{ ff_date(carbonize($currentPaid['date']), $monthAndDayFormat) }}</a>
                                                 <br/>
                                             @endforeach
                                         </td>
                                         <td class="expected_in_period">
                                             <!-- not just show next expected match, loop all pay_dates. -->
                                             @if($entry['next_expected_match'] && 1 === count($entry['pay_dates']))
-                                                {{ carbonize($entry['next_expected_match'])->isoFormat($monthAndDayFormat) }}
+                                                {{ ff_date(carbonize($entry['next_expected_match']), $monthAndDayFormat) }}
                                             @elseif($entry['next_expected_match'] && count($entry['pay_dates']) > 0)
                                                 @foreach($entry['pay_dates'] as $date)
-                                                    {{ carbonize($date)->isoFormat($monthAndDayFormat) }}<br>
+                                                    {{ ff_date(carbonize($date), $monthAndDayFormat) }}<br>
                                                 @endforeach
                                             @else
                                                 <span class="text-muted">{{ $entry['next_expected_match_diff'] }}</span>

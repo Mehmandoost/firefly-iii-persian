@@ -94,7 +94,7 @@ $hideCategory = $hideCategory ?? false;
             </td>
 
             <td>
-                {{ $transaction['date']->isoFormat($monthAndDayFormat) }}
+                {{ ff_date($transaction['date'], $monthAndDayFormat) }}
             </td>
 
             @if(!$hideSource)

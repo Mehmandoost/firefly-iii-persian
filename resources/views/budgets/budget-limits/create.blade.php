@@ -3,7 +3,7 @@
         <div class="modal-header">
             <h5 class="modal-title">
                 {{ trans('firefly.set_budget_limit_title',
-                    ['start' => $start->isoFormat($monthAndDayFormat), 'end' => $end->isoFormat($monthAndDayFormat), 'budget' => $budget->name]) }}
+                    ['start' => ff_date($start, $monthAndDayFormat), 'end' => ff_date($end, $monthAndDayFormat), 'budget' => $budget->name]) }}
             </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('firefly.close') }}"></button>
         </div>

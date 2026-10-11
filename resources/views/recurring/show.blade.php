@@ -67,7 +67,7 @@
                 @if(null !== $array['repeat_until'] && now() > $array['repeat_until'])
 
                     <span class="text-danger">
-                                            {{ trans('firefly.repeat_until_in_past', ['date' => $array['repeat_until']->isoFormat($monthAndDayFormat)]) }}
+                                            {{ trans('firefly.repeat_until_in_past', ['date' => ff_date($array['repeat_until'], $monthAndDayFormat)]) }}
                                         </span>
                 @endif
                 @foreach($array['repetitions'] as $rep)
@@ -85,7 +85,7 @@
                         <tbody>
                         @foreach($rep['occurrences'] as $occ)
                             <tr>
-                                <th scope="row">{{ $occ['date']->isoFormat(trans('config.month_and_date_day_js')) }}</th>
+                                <th scope="row">{{ ff_date($occ['date'], trans('config.month_and_date_day_js')) }}</th>
                                 <td>
                                     @if(!$occ['fired'])
                                         <form action="{{ route('recurring.trigger', [$recurrence['id']]) }}" method="post"

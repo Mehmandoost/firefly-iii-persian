@@ -28,7 +28,7 @@
                 </td>
                 <td colspan="3">
                     <span class="badge text-bg-primary">
-                        {{ trans('firefly.start_of_reconcile_period', ['period' => $start->isoFormat($monthAndDayFormat)]) }}
+                        {{ trans('firefly.start_of_reconcile_period', ['period' => ff_date($start, $monthAndDayFormat)]) }}
                     </span>
                 </td>
                 <td colspan="2">
@@ -51,7 +51,7 @@
                 </td>
                 <td colspan="3">
                     <span class="badge text-bg-primary">
-                        {{ trans('firefly.end_of_reconcile_period', ['period' => $end->isoFormat($monthAndDayFormat)]) }}
+                        {{ trans('firefly.end_of_reconcile_period', ['period' => ff_date($end, $monthAndDayFormat)]) }}
                     </span>
                 </td>
                 <td colspan="2">
@@ -122,7 +122,7 @@
             </td>
 
             <td>
-                {{ $journal['date']->isoFormat($monthAndDayFormat) }}
+                {{ ff_date($journal['date'], $monthAndDayFormat) }}
             </td>
 
             <td class="hidden-xs">
@@ -143,7 +143,7 @@
             </td>
             <td colspan="3">
                 <span class="badge text-bg-primary">
-                    {{ trans('firefly.start_of_reconcile_period', ['period' => $start->isoFormat($monthAndDayFormat)]) }}
+                    {{ trans('firefly.start_of_reconcile_period', ['period' => ff_date($start, $monthAndDayFormat)]) }}
                 </span>
             </td>
             <td colspan="2">

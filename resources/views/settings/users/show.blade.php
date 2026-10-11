@@ -20,7 +20,7 @@
                         <tr>
                             <td>{{ trans('list.created_at') }}</td>
                             <td>
-                                {{ $user->created_at->isoFormat($monthAndDayFormat) }}
+                                {{ ff_date($user->created_at, $monthAndDayFormat) }}
                                 {{ $user->created_at->format('H:i') }}</td>
                         </tr>
                         <tr>

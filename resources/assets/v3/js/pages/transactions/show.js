@@ -31,6 +31,7 @@ import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerRetinaIcon from "leaflet/dist/images/marker-icon-2x.png";
 import shadow from "leaflet/dist/images/marker-shadow.png";
 import formatDate from "../../util/format-date.js";
+import { formatWithJalali } from "../../util/jalali.js";
 
 window.enableDates = false;
 
@@ -79,7 +80,11 @@ let show = function () {
             });
         },
         downloadTransactionGroup() {
-            let locale = window.store.get("locale");
+            const locale = window.store.get("locale");
+            let formatStr = i18next.t("config.date_time_fns", { lng: window.store.get("language") });
+            if (!formatStr || formatStr.includes(".")) {
+                formatStr = "MMMM do, yyyy '@' HH:mm:ss";
+            }
 
             new Get().show(this.group.id).then((response) => {
                 const info = response.data.data;
@@ -89,12 +94,8 @@ let show = function () {
                     if (Object.hasOwn(info.attributes.transactions, i)) {
                         let current = info.attributes.transactions[i];
                         current.dateObject = new Date(current.date);
-                        current.dateFormatted = formatDate(
-                            current.dateObject,
-                            i18next.t("config.date_time_fns", { lng: locale }),
-                            locale,
-                        );
-                        console.log("Date formatted is", current.dateFormatted);
+                        const gregorianDate = formatDate(current.dateObject, formatStr, locale);
+                        current.dateFormatted = formatWithJalali(gregorianDate, current.dateObject, true);
                         this.group.transactions.push(current);
                     }
                 }

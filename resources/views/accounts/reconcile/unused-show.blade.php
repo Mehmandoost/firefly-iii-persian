@@ -39,7 +39,7 @@
                         </tr>
                         <tr>
                             <td class="thirty">{{ trans('list.date') }}</td>
-                            <td>{{ $journal->date->isoFormat($monthAndDayFormat) }}</td>
+                            <td>{{ ff_date($journal->date, $monthAndDayFormat) }}</td>
                         </tr>
                         </tbody>
                     </table>

@@ -60,11 +60,11 @@
                                 <td data-value="{{ $user->email }}">
                                     <a href="{{ route('settings.users.show',$user->id) }}">{{ $user->email }}</a></td>
                                 <td class="hidden-xs" data-value="{{ $user->created_at->format('Y-m-d H-i-s') }}">
-                                    {{ $user->created_at->isoFormat($monthAndDayFormat) }}
+                                    {{ ff_date($user->created_at, $monthAndDayFormat) }}
                                     {{ $user->created_at->format('H:i') }}
                                 </td>
                                 <td class="hidden-xs" data-value="{{ $user->updated_at->format('Y-m-d H-i-s') }}">
-                                    {{ $user->updated_at->isoFormat($monthAndDayFormat) }}
+                                    {{ ff_date($user->updated_at, $monthAndDayFormat) }}
                                     {{ $user->updated_at->format('H:i') }}
                                 </td>
                                 <td class="hidden-xs" data-value="{{ $user->isAdmin ? '1' : '0' }}">
@@ -141,11 +141,11 @@
                                         {{ $invitee->email }}
                                     </td>
                                     <td class="hidden-xs">
-                                        {{ $invitee->created_at->isoFormat($monthAndDayFormat) }}
+                                        {{ ff_date($invitee->created_at, $monthAndDayFormat) }}
                                         {{ $invitee->created_at->format('H:i') }}
                                     </td>
                                     <td>
-                                        {{ $invitee->expires->isoFormat($monthAndDayFormat) }}
+                                        {{ ff_date($invitee->expires, $monthAndDayFormat) }}
                                         {{ $invitee->expires->format('H:i') }}
                                     </td>
                                     <td>

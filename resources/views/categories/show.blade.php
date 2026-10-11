@@ -7,7 +7,7 @@
                 <div class="card mb-2">
                     <div class="card-header">
                         <h3 class="card-title">
-                            {{ trans('firefly.chart_category_in_period', ['name' => $category->name, 'start' => $start->isoFormat($monthAndDayFormat), 'end' => $end->isoFormat($monthAndDayFormat)]) }}
+                            {{ trans('firefly.chart_category_in_period', ['name' => $category->name, 'start' => ff_date($start, $monthAndDayFormat), 'end' => ff_date($end, $monthAndDayFormat)]) }}
                         </h3>
                     </div>
                     <div class="card-body">

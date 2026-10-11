@@ -29,9 +29,9 @@
                 <td class="hidden-xs" data-value="{{ $budgetLimit['start_date']->format('Y-m-d') }}">
                     @if(null !== $budgetLimit['budget_limit_id'])
                         <a href="{{ route('budgets.show.limit', [$budget['budget_id'], $budgetLimit['budget_limit_id']]) }}">
-                            {{ $budgetLimit['start_date']->isoFormat($monthAndDayFormat) }}
+                            {{ ff_date($budgetLimit['start_date'], $monthAndDayFormat) }}
                             &mdash;
-                            {{ $budgetLimit['end_date']->isoFormat($monthAndDayFormat) }}
+                            {{ ff_date($budgetLimit['end_date'], $monthAndDayFormat) }}
                         </a>
                     @endif
                 </td>

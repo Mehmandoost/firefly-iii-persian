@@ -112,6 +112,28 @@
                                     <input type="hidden" name="locale" value="equal"/>
                                 @endif
 
+                                {{-- date input calendar --}}
+                                <div class="card mb-2">
+                                    <div class="card-header">
+                                        <h3 class="card-title">{{ __('firefly.pref_date_input_calendar') }}</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>{{ __('firefly.pref_date_input_calendar_help') }}</p>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <select class="form-select" name="dateInputCalendar" id="date_input_calendar_holder">
+                                                    <option value="gregorian" @if($dateInputCalendar === 'gregorian') selected @endif>
+                                                        {{ __('firefly.pref_date_input_calendar_gregorian') }}
+                                                    </option>
+                                                    <option value="jalali" @if($dateInputCalendar === 'jalali') selected @endif>
+                                                        {{ __('firefly.pref_date_input_calendar_jalali') }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 {{-- fiscal year --}}
                                 <div class="card mb-2">
                                     <div class="card-header">

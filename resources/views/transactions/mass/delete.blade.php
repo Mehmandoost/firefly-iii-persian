@@ -78,7 +78,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {{ $journal['date']->isoFormat($monthAndDayFormat) }}
+                                        {{ ff_date($journal['date'], $monthAndDayFormat) }}
                                     </td>
                                     <td>
                                         <a href="{{ route('accounts.show', [$journal['source_account_id']]) }}"

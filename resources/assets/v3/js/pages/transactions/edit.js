@@ -79,11 +79,13 @@ import { respondToTabSwitch } from "./shared/respond-to-tab-switch.js";
 import Alpine from "@alpinejs/csp";
 import focusFirstInput from "../../shared/focus-first-input.js";
 import filterForeignCurrencies from "./shared/filter-foreign-currencies.js";
+import { dateInputCalendarState } from "./shared/date-input-calendar.js";
 
 window.enableDates = false;
 
 let transactions = function () {
     return {
+        ...dateInputCalendarState(),
         // needed for translations
         i18next: null,
 
@@ -317,6 +319,7 @@ let transactions = function () {
 
         init() {
             this.i18next = i18next;
+            this.initDateInputCalendar();
             // download translations and get the transaction group.
             this.notifications.wait.show = true;
             this.notifications.wait.text = i18next.t("firefly.wait_loading_transaction");

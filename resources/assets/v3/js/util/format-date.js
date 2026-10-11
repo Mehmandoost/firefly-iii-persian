@@ -89,17 +89,37 @@ const locales = {
     zhCN,
 };
 
+const FALLBACK_FORMAT = "MMMM do, yyyy '@' HH:mm:ss";
+
+function resolveDateFnsLocale(locale) {
+    if (typeof locale === "undefined") {
+        locale = window.__localeId__ ?? "en-US";
+    }
+    const compact = String(locale).replace(/[-_]/g, "");
+    return locales[compact] ?? locales[locale] ?? locales[String(locale).slice(0, 2)] ?? locales.enUS;
+}
+
+// Translations sometimes return the raw key, or a Moment/Carbon pattern date-fns rejects.
+function normalizeFormat(formatStr) {
+    if (typeof formatStr !== "string" || formatStr === "" || formatStr.includes(".")) {
+        return FALLBACK_FORMAT;
+    }
+    return formatStr.replaceAll("YYYY", "yyyy").replaceAll("YY", "yy").replaceAll("DD", "dd").replaceAll("D", "d");
+}
+
 // by providing a default string of 'PP' or any of its variants for `formatStr`
 // it will format dates in whichever way is appropriate to the locale
 export default function (date, formatStr = "PP", locale) {
-    if (typeof locale === "undefined") {
-        locale = window.__localeId__.replace("_", "").replace("-", "");
-    }
-    let res = "(DATE ERROR)";
+    const dateFnsLocale = resolveDateFnsLocale(locale);
     try {
-        res = format(date, formatStr, { locale: locales[locale] ?? locales[locale.slice(0, 2)] ?? locales["enUS"] });
+        return format(date, normalizeFormat(formatStr), { locale: dateFnsLocale });
     } catch (error) {
-        console.warn("Could not format date: ", error);
+        console.warn("Could not format date: ", error, formatStr);
     }
-    return res;
+    try {
+        return format(date, FALLBACK_FORMAT, { locale: locales.enUS });
+    } catch (error) {
+        console.warn("Fallback date format failed", error);
+    }
+    return "(DATE ERROR)";
 }

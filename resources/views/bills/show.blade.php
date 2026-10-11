@@ -57,7 +57,7 @@
                             <td>
 
                                 @if(count($object['data']['pay_dates']) > 0)
-                                    {{ carbonize($object['data']['pay_dates'][0])->isoFormat($monthAndDayFormat) }}
+                                    {{ ff_date(carbonize($object['data']['pay_dates'][0]), $monthAndDayFormat) }}
                                 @else
                                     {{ __('firefly.unknown') }}
                                 @endif

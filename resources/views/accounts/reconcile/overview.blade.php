@@ -20,7 +20,7 @@
 
                 <table class="table table-striped table-sm">
                     <tr>
-                        <td>{{ __('firefly.submitted_start_balance') }} ({{ $start->isoFormat($monthAndDayFormat) }})</td>
+                        <td>{{ __('firefly.submitted_start_balance') }} ({{ ff_date($start, $monthAndDayFormat) }})</td>
                         <td>{!! format_amount_by_account($account, $startBalance) !!} </td>
                     </tr>
                     <tr>
@@ -32,7 +32,7 @@
                         <td>{!! format_amount_by_account($account, $clearedAmount) !!} </td>
                     </tr>
                     <tr>
-                        <td>{{ __('firefly.submitted_end_balance') }} ({{ $end->isoFormat($monthAndDayFormat) }})</td>
+                        <td>{{ __('firefly.submitted_end_balance') }} ({{ ff_date($end, $monthAndDayFormat) }})</td>
                         <td>{!! format_amount_by_account($account, $endBalance) !!} </td>
                     </tr>
                     <tr>

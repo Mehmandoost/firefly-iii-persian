@@ -13,16 +13,16 @@
                         {!! trans('firefly.chart_account_in_period', [
                                 'balance' => format_amount_by_symbol($balances['balance'], $currency->symbol, $currency->decimal_places, true),
                                 'name' => e($account->name),
-                                'start' => $start->isoFormat($monthAndDayFormat),
-                                'end' => $end->isoFormat($monthAndDayFormat)])  !!}
+                                'start' => ff_date($start, $monthAndDayFormat),
+                                'end' => ff_date($end, $monthAndDayFormat)])  !!}
                                 </span>
                                 @elseif($balances['pc_balance'])
                                     <span title="pc_balance">
                             {!!  trans('firefly.chart_account_in_period', [
                                 'balance' => format_amount_by_symbol($balances['pc_balance'], $primaryCurrency->symbol, $primaryCurrency->decimal_places, true),
                                 'name' => e($account->name),
-                                'start' => $start->isoFormat($monthAndDayFormat),
-                                'end' => $end->isoFormat($monthAndDayFormat)])  !!}
+                                'start' => ff_date($start, $monthAndDayFormat),
+                                'end' => ff_date($end, $monthAndDayFormat)])  !!}
                                 </span>
                                 @endif
                             </h3>
@@ -233,7 +233,7 @@
             }
             {{-- render vertical line with text "today" --}}
             @if($start->lte($today) && $end->gte($today))
-                drawVerticalLine = '{{ $today->isoFormat($monthAndDayFormat) }}';
+                drawVerticalLine = '{{ ff_date($today, $monthAndDayFormat) }}';
             @endif
         @endif
 

@@ -22,7 +22,7 @@
                             <div class="btn-group btn-group-lg pt-0">
                                 <a href="{{ route('budgets.index', [$prevLoop[0]['start']->format('Y-m-d'), $prevLoop[0]['end']->format('Y-m-d')]) }}"
                                    class="btn btn-secondary" title="{{ $prevLoop[0]['title'] }}">&larr;</a>
-                                <a title="{{ $start->isoFormat($monthAndDayFormat) }} - {{ $end->isoFormat($monthAndDayFormat) }}"
+                                <a title="{{ ff_date($start, $monthAndDayFormat) }} - {{ ff_date($end, $monthAndDayFormat) }}"
                                    href="{{ route('budgets.index', [$start->format('Y-m-d'), $end->format('Y-m-d')]) }}"
                                    class="btn btn-secondary">{{ $periodTitle }}</a>
                                 <a href="{{ route('budgets.index', [$nextLoop[0]['start']->format('Y-m-d'), $nextLoop[0]['end']->format('Y-m-d')]) }}"
@@ -52,7 +52,7 @@
                         <h3 class="card-title">
                             {{ trans('firefly.total_available_budget_in_currency', ['currency' => $primaryCurrency->name]) }}
                             <br>
-                            <small>{{ trans('firefly.between_dates_breadcrumb', ['start' => $start->isoFormat($monthAndDayFormat), 'end' => $end->isoFormat($monthAndDayFormat)]) }}</small>
+                            <small>{{ trans('firefly.between_dates_breadcrumb', ['start' => ff_date($start, $monthAndDayFormat), 'end' => ff_date($end, $monthAndDayFormat)]) }}</small>
                         </h3>
                     </div>
                     <div class="card-body">
@@ -67,7 +67,7 @@
                             </div>
                             {{-- info about the amount spent --}}
                             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 text-end">
-                                <small class="available_bar" data-id="0">{{ trans('firefly.available_between', ['start' => $start->isoFormat($monthAndDayFormat), 'end' => $end->isoFormat($monthAndDayFormat)]) }}:
+                                <small class="available_bar" data-id="0">{{ trans('firefly.available_between', ['start' => ff_date($start, $monthAndDayFormat), 'end' => ff_date($end, $monthAndDayFormat)]) }}:
                                     <span class="available_amount" data-id="0" data-value="0" data-currency="{{ $primaryCurrency['id'] }}" data-value="0">{!! format_amount_by_symbol(0, $primaryCurrency->symbol, $primaryCurrency->decimal_places, true) !!}</span>
                                 </small>
                             </div>
@@ -75,7 +75,7 @@
                         {{-- info text to show how much is spent (in currency). --}}
                         <div class="row spentInfo" data-id="0" data-value="{{ $spent }}">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <small>{{ trans('firefly.spent_between', ['start' => $start->isoFormat($monthAndDayFormat), 'end' => $end->isoFormat($monthAndDayFormat)]) }}:
+                                <small>{{ trans('firefly.spent_between', ['start' => ff_date($start, $monthAndDayFormat), 'end' => ff_date($end, $monthAndDayFormat)]) }}:
                                     {!! format_amount_by_symbol($spent, $primaryCurrency->symbol, $primaryCurrency->decimal_places) !!} </small>
                             </div>
                         </div>
@@ -97,7 +97,7 @@
                             <h3 class="card-title">
                                 {{ trans('firefly.total_available_budget_in_currency', ['currency' => $budget['transaction_currency']['name']]) }}
                                 <br>
-                                <small>{{ trans('firefly.between_dates_breadcrumb', ['start' => $budget['start_date']->isoFormat($monthAndDayFormat), 'end' => $budget['end_date']->isoFormat($monthAndDayFormat)]) }}</small>
+                                <small>{{ trans('firefly.between_dates_breadcrumb', ['start' => ff_date($budget['start_date'], $monthAndDayFormat), 'end' => ff_date($budget['end_date'], $monthAndDayFormat)]) }}</small>
                             </h3>
                         </div>
                         <div class="card-body">
@@ -115,7 +115,7 @@
                                 </div>
                                 {{--  info about the amount spent --}}
                                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 text-end mb-1">
-                                    <small class="available_bar" data-id="{{ $budget['id'] }}">{{ trans('firefly.available_between', ['start' => $budget['start_date']->isoFormat($monthAndDayFormat), 'end' => $budget['end_date']->isoFormat($monthAndDayFormat)]) }}:
+                                    <small class="available_bar" data-id="{{ $budget['id'] }}">{{ trans('firefly.available_between', ['start' => ff_date($budget['start_date'], $monthAndDayFormat), 'end' => ff_date($budget['end_date'], $monthAndDayFormat)]) }}:
                                         <span class="available_amount" data-id="{{ $budget['id'] }}" data-currency="{{ $budget['transaction_currency']['id'] }}"
                                               data-value="{{ $budget['amount'] }}">
                                             {!! format_amount_by_symbol($budget['amount'], $budget['transaction_currency']['symbol'], $budget['transaction_currency']['decimal_places'], true) !!}
@@ -149,8 +149,8 @@
                             <div class="row spentInfo" data-id="{{ $budget['id'] }}">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <small>{!! trans('firefly.spent_between_left', [
-                                            'start' => $budget['start_date']->isoFormat($monthAndDayFormat),
-                                            'end' => $budget['end_date']->isoFormat($monthAndDayFormat),
+                                            'start' => ff_date($budget['start_date'], $monthAndDayFormat),
+                                            'end' => ff_date($budget['end_date'], $monthAndDayFormat),
                                             'spent' => format_amount_by_symbol($budget['spent'], $budget['transaction_currency']['symbol'], $budget['transaction_currency']['decimal_places']),
                                             'left' => format_amount_by_symbol($budget['budgeted'] + $budget['spent'], $budget['transaction_currency']['symbol'], $budget['transaction_currency']['decimal_places']),
                                         ])  !!}
@@ -405,7 +405,7 @@
                     <div class="card-body">
                         <p>
                             <a href="{{ route('budgets.no-budget', [$start->format('Y-m-d'), $end->format('Y-m-d')]) }}">
-                                {{ trans('firefly.transactions_no_budget', ['start' => $start->isoFormat($monthAndDayFormat), 'end' => $end->isoFormat($monthAndDayFormat)]) }}
+                                {{ trans('firefly.transactions_no_budget', ['start' => ff_date($start, $monthAndDayFormat), 'end' => ff_date($end, $monthAndDayFormat)]) }}
                             </a>
                         </p>
                     </div>

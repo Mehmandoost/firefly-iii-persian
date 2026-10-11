@@ -148,6 +148,7 @@ abstract class Controller extends BaseController
             $this->monthAndDayFormat = (string) trans('config.month_and_day_js', [], $locale);
             $this->dateTimeFormat    = (string) trans('config.date_time_js', [], $locale);
             $darkMode                = 'browser';
+            $dateInputCalendar       = 'gregorian';
             $this->primaryCurrency   = null;
             // get shown-intro-preference:
             if (auth()->check()) {
@@ -156,6 +157,7 @@ abstract class Controller extends BaseController
                 $language               = Steam::getLanguage();
                 $locale                 = Steam::getLocale();
                 $darkMode               = Preferences::get('darkMode', 'browser')->data;
+                $dateInputCalendar      = Preferences::get('dateInputCalendar', 'gregorian')->data;
                 $this->convertToPrimary = Amount::convertToPrimary();
                 $page                   = $this->getPageName();
                 $shownDemo              = $this->hasSeenDemo();
@@ -175,6 +177,7 @@ abstract class Controller extends BaseController
                 }
             }
             View::share('darkMode', $darkMode);
+            View::share('dateInputCalendar', $dateInputCalendar);
 
             return $next($request);
         });

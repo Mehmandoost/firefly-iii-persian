@@ -161,7 +161,7 @@
         </td>
         @endif
         <td class="{{ $className }}">
-            {{ $transaction['date']->isoFormat($monthAndDayFormat) }}
+            {{ ff_date($transaction['date'], $monthAndDayFormat) }}
         </td>
         <td class="{{ $className }}">
             @if('Cash account' === $transaction['source_account_type'])

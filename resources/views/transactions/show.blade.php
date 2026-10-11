@@ -400,7 +400,7 @@
                                 @if(journal_has_meta($journal['transaction_journal_id'], $dateField))
                                     <tr>
                                         <td class="w-30">{{ trans('list.' . $dateField) }}</td>
-                                        <td>{{ journal_get_meta_date($journal['transaction_journal_id'], $dateField)->isoFormat($monthAndDayFormat) }}</td>
+                                        <td>{{ ff_date(journal_get_meta_date($journal['transaction_journal_id'], $dateField), $monthAndDayFormat) }}</td>
                                     </tr>
                                 @endif
                             @endforeach

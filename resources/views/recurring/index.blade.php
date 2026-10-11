@@ -64,7 +64,7 @@
                                     <td>
                                         @if(null !== $rt['repeat_until'] && $today > $rt['repeat_until'])
                                             <span class="text-danger">
-                                            {{ trans('firefly.repeat_until_in_past', ['date' => $rt['repeat_until']->isoFormat($monthAndDayFormat)]) }}
+                                            {{ trans('firefly.repeat_until_in_past', ['date' => ff_date($rt['repeat_until'], $monthAndDayFormat)]) }}
                                         </span>
                                         @endif
                                         <ul>
@@ -93,7 +93,7 @@
                                                 {{ __('firefly.recurring_repeats_forever') }}.
                                             @endif
                                             @if(null !== $rt['repeat_until'] && 0 === $rt['repetitions'])
-                                                {{ trans('firefly.recurring_repeats_until', ['date' => $rt['repeat_until']->isoFormat($monthAndDayFormat)]) }}.
+                                                {{ trans('firefly.recurring_repeats_until', ['date' => ff_date($rt['repeat_until'], $monthAndDayFormat)]) }}.
                                             @endif
                                             @if(null === $rt['repeat_until'] && 0 !== (int)$rt['nr_of_repetitions'])
                                                {{ trans_choice('firefly.recurring_repeats_x_times', $rt['nr_of_repetitions']) }}.
@@ -105,7 +105,7 @@
                                             @foreach($rt['repetitions'] as $rep)
                                                 @foreach($rep['occurrences'] as $occ)
                                                     @if($loop->index < 2)
-                                                        <li>{{ $occ->isoFormat($monthAndDayFormat) }}</li>
+                                                        <li>{{ ff_date($occ, $monthAndDayFormat) }}</li>
                                                     @endif
                                                 @endforeach
                                             @endforeach

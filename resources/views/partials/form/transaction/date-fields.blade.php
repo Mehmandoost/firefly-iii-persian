@@ -7,13 +7,20 @@
                     <em class="bi bi-calendar-date" :title="i18next.t('firefly.pref_optional_tj_' + key)"></em>
                 </label>
                 <div class="col-sm-10">
-                    <input type="date"
-                           class="form-control"
-                           :id="key + '_' + index"
-                           @keyup.enter="save()"
-                           x-model="transaction[key]"
-                           :data-index="index"
-                           placeholder="">
+                    <template x-if="dateInputCalendar === 'gregorian'">
+                        <input type="date"
+                               class="form-control"
+                               :id="key + '_' + index"
+                               @keyup.enter="save()"
+                               x-model="transaction[key]"
+                               :data-index="index"
+                               placeholder="">
+                    </template>
+                    <template x-if="dateInputCalendar === 'jalali'">
+                        <div data-jalali-picker="date">
+                            <input type="hidden" data-jalali-value :id="key + '_' + index" x-model="transaction[key]">
+                        </div>
+                    </template>
                 </div>
             </div>
         </template>

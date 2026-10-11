@@ -38,8 +38,8 @@
                                     [
                                         'account_name'=> e($account->name),
                                         'url' => route('accounts.show', [$account->id]),
-                                        'start'=> $start->isoFormat($monthAndDayFormat),
-                                        'end' => $end->isoFormat($monthAndDayFormat),
+                                        'start'=> ff_date($start, $monthAndDayFormat),
+                                        'end' => ff_date($end, $monthAndDayFormat),
                                     ]) !!}
 
                             </em>

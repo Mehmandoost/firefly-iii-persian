@@ -108,7 +108,7 @@
         @if($account->lastActivityDate)
         <td {{-- hide on LG and smaller. --}} class="d-lg-table-cell d-none">
             <!-- {{ $account->lastActivityDate }} -->
-            {{ $account->lastActivityDate?->isoFormat($monthAndDayFormat) }}
+            {{ ff_date($account->lastActivityDate, $monthAndDayFormat) }}
         </td>
         @else
         <td {{-- hide on LG and smaller. --}} class="d-lg-table-cell d-none">

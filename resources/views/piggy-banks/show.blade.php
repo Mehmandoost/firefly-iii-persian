@@ -92,7 +92,7 @@
                                 <td>{{ __('firefly.start_date') }}</td>
                                 <td>
                                     @if(null !== $piggyBank->start_date)
-                                        {{ $piggyBank->start_date->isoFormat($monthAndDayFormat) }}
+                                        {{ ff_date($piggyBank->start_date, $monthAndDayFormat) }}
                                     @else
                                         <em>{{ __('firefly.no_start_date') }}</em>
                                     @endif
@@ -102,7 +102,7 @@
                                 <td>{{ __('firefly.target_date') }}</td>
                                 <td>
                                     @if(null !== $piggyBank->target_date)
-                                        {{ $piggyBank->target_date->isoFormat($monthAndDayFormat) }}
+                                        {{ ff_date($piggyBank->target_date, $monthAndDayFormat) }}
                                     @else
                                         <em>{{ __('firefly.no_target_date') }}</em>
                                     @endif

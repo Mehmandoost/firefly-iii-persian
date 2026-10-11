@@ -508,7 +508,19 @@
                             }
                         }
                     </style>
-                    <div class="row">
+                    @if(($dateInputCalendar ?? 'gregorian') === 'jalali')
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="customStart">{{ __('firefly.from') }}</label>
+                                <div data-jalali-date-target="customStart"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="customEnd">{{ __('firefly.to') }}</label>
+                                <div data-jalali-date-target="customEnd"></div>
+                            </div>
+                        </div>
+                    @endif
+                    <div class="row @if(($dateInputCalendar ?? 'gregorian') === 'jalali') d-none @endif">
                         <div class="col" style="width:100%;display:flex;justify-content:center;">
                             <calendar-range months="2" id="customDateRangeCalendar">
                                 <svg

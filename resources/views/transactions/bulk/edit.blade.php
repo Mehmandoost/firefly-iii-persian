@@ -58,7 +58,7 @@
 
 
                                             </td>
-                                            <td>{{ $journal['date']->isoFormat($monthAndDayFormat) }}</td>
+                                            <td>{{ ff_date($journal['date'], $monthAndDayFormat) }}</td>
                                             <td>
                                                 @if($journal['category_id'] != null)
                                                     <a href="{{ route('categories.show', [$journal['category_id']]) }}" title="{{ $journal['category_name'] }}">{{ $journal['category_name'] }}</a>

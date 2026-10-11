@@ -28,6 +28,7 @@ use FireflyIII\Enums\AccountTypeEnum;
 use FireflyIII\Enums\TransactionTypeEnum;
 use FireflyIII\Exceptions\FireflyException;
 use FireflyIII\Models\Account;
+use FireflyIII\Support\Calendar\JalaliCalendar;
 use FireflyIII\Models\Transaction;
 use FireflyIII\Models\TransactionCurrency;
 use FireflyIII\Models\TransactionJournal;
@@ -432,6 +433,19 @@ if (!function_exists('carbonize')) {
     function carbonize(string $date): Carbon
     {
         return new Carbon($date, config('app.timezone'));
+    }
+}
+
+if (!function_exists('ff_date')) {
+    function ff_date(?CarbonInterface $date, string $format): string
+    {
+        if (null === $date) {
+            return '';
+        }
+        $gregorian = $date->isoFormat($format);
+        $jalali    = JalaliCalendar::formatIsoFormat($date instanceof Carbon ? $date : Carbon::instance($date), $format);
+
+        return sprintf('%s · %s', $gregorian, $jalali);
     }
 }
 

@@ -117,6 +117,7 @@ final class PreferencesController extends Controller
         $languages                      = config('firefly.languages');
         $locale                         = Preferences::get('locale', config('firefly.default_locale', 'equal'))->data;
         $listPageSize                   = Preferences::get('listPageSize', 50)->data;
+        $dateInputCalendar              = Preferences::get('dateInputCalendar', 'gregorian')->data;
         $darkMode                       = Preferences::get('darkMode', 'browser')->data;
         $customFiscalYear               = Preferences::get('customFiscalYear', 0)->data;
         $fiscalYearStartStr             = Preferences::get('fiscalYearStart', '01-01')->data;
@@ -225,6 +226,7 @@ final class PreferencesController extends Controller
             'customFiscalYear'   => $customFiscalYear,
             'listPageSize'       => $listPageSize,
             'fiscalYearStart'    => $fiscalYearStart,
+            'dateInputCalendar'  => $dateInputCalendar,
         ]);
     }
 
@@ -318,6 +320,12 @@ final class PreferencesController extends Controller
         if ($listPageSize > 0 && $listPageSize < 1337) {
             Preferences::set('listPageSize', $listPageSize);
         }
+
+        $dateInputCalendarPref = (string) $request->input('dateInputCalendar', 'gregorian');
+        if (!in_array($dateInputCalendarPref, ['gregorian', 'jalali'], true)) {
+            $dateInputCalendarPref = 'gregorian';
+        }
+        Preferences::set('dateInputCalendar', $dateInputCalendarPref);
 
         // language:
         /** @var Preference $currentLang */
